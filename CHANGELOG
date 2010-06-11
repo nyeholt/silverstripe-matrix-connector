@@ -1,0 +1,13 @@
+Version 0.2.0
+-------------
+
+* Added ability to import using queued jobs
+* Added more specific ContentItem types for better display of icons and import
+  functionality
+
+
+Version 0.1.0
+-------------
+2009-10-02
+
+* Initial development
