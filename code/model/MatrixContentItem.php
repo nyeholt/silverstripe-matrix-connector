@@ -49,26 +49,18 @@ class MatrixContentItem extends ExternalContentItem
 	 * @param Int $id
 	 * 					The Alfresco ID of this object
 	 */
-	public function __construct($source=null, $id=null)
+	public function __construct($source=null, $id=null, $data=null)
 	{
 		parent::__construct($source, $id);
 		if ($this->source) {
-			$repo = $this->source->getRemoteRepository();
-			// lets load the object from the Alfresco repository and populate the 'remoteProperties' field
-			$data = $repo->call('getGeneral', array('id' => $id));
-			foreach ($data as $key => $value) {
-				$this->remoteProperties[$key] = $value;
+			if (!$data) {
+				$repo = $this->source->getRemoteRepository();
+				// lets load the object from the Alfresco repository and populate the 'remoteProperties' field
+				$data = $repo->getAsset(array('id' => $id));
 			}
 
-			$data = $repo->call('getAttributes', array('id'=>$id));
-			if ($data) {
-				foreach ($data as $key => $value) {
-					if ($key == 'asset_links') {
-						$this->assetLinks = $value;
-					} else {
-						$this->remoteProperties[$key] = $value;
-					}
-				}
+			foreach ($data as $key => $value) {
+				$this->remoteProperties[$key] = $value;
 			}
 
 			$this->Title = isset($this->remoteProperties['name']) ? $this->remoteProperties['name'] : 'No name';
@@ -120,14 +112,17 @@ class MatrixContentItem extends ExternalContentItem
 					return $this->objChildren;
 				}
 
-				$childItems = $repo->call('getChildren', array('id'=>$this->remoteProperties['id'], 'depth' => 1));
+				$childItems = $repo->getChildren(array('id'=>$this->remoteProperties['id'], 'depth' => 1));
 				if(isset($_GET['debug_profile'])) Profiler::unmark("MatrixContentItem", "getChildren");
 				// make sure that there's no errors!!
 				if (!isset($childItems->error)) {
 					if(isset($_GET['debug_profile'])) Profiler::mark("MatrixContentItem", "loadChildren");
 					// means there weren't any children of this asset
 					foreach ($childItems as $childId => $properties) {
-						$item = $this->source->getObject($childId);
+						$item = $this->source->getObject($properties->id);
+						if (isset($properties->LinkType)) {
+							$item->ShowInMenus = true;
+						}
 						$this->objChildren->push($item);
 					}
 					if(isset($_GET['debug_profile'])) Profiler::unmark("MatrixContentItem", "loadChildren");

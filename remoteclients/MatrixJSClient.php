@@ -90,7 +90,7 @@ class MatrixJSClient
 			
 			if (preg_match('/"SQ_LOGIN_KEY"\s*value="(\w+)"/', $fre->getResponse(), $matches)) {
 				try {
-					$this->call('login', array($details['username'], $details['password'], $matches[1], 'login'));
+					$this->call('login', array($details['username'], $details['password'], $matches[1]));
 				} catch (FailedRequestException $again) {
 					throw $again;
 				}
@@ -122,12 +122,38 @@ class MatrixJSClient
 		$this->api->setGlobalParam('type', $method);
 		return $this->api->callMethod($method, $args);
 	}
+
+	/**
+	 * Catch calls to call()
+	 *
+	 * @param string $method
+	 * @param array $args
+	 */
+	public function __call($method, $args) {
+		$params = ($args != null && isset($args[0])) ? $args[0] : $args;
+		return $this->call($method, $params);
+	}
+
+	/**
+	 * A call to get General needs to getGeneral then getAttributes
+	 *
+	 * @param array $args
+	 */
+	public function getAsset($args) {
+		$data = $this->getGeneral($args);
+		$attr = $this->getAttributes($args);
+		foreach ($attr as $k => $v) {
+			$data->$k = $v;
+		}
+
+		return $data;
+	}
 	
 	private static $methods = array(
 		'login' => array(
 			'method' => 'POST',
-			'url' => '',
-			'params' => array('SQ_LOGIN_USERNAME', 'SQ_LOGIN_PASSWORD', 'SQ_LOGIN_KEY', 'SQ_ACTION'),
+			'params' => array('SQ_LOGIN_USERNAME', 'SQ_LOGIN_PASSWORD', 'SQ_LOGIN_KEY'),
+			'get'    => array('SQ_ACTION' => 'login'),
 			'cache' => false
 			// 'enctype' => Zend_Http_Client::ENC_FORMDATA,
 		),

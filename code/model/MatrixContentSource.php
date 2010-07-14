@@ -32,7 +32,7 @@ OF SUCH DAMAGE.
 class MatrixContentSource extends ExternalContentSource implements ExternalContentRepositoryProvider
 {
 	public static $db = array(
-		'ConnectorType' => "Enum('JS API,REST API,Feed API')",
+		'ConnectorType' => "Enum('JS API,SOAP API')",
 		'ApiUrl' => 'Varchar(128)',
 		'Username' => 'Varchar(64)',
 		'Password' => 'Varchar(64)',
@@ -68,7 +68,7 @@ class MatrixContentSource extends ExternalContentSource implements ExternalConte
 	{
 		$fields = parent::getCMSFields();
 		
-		$fields->addFieldToTab('Root.Main', new DropdownField('ConnectorType', _t('ExternalContentSource.CONNECTOR_TYPE', 'Connector Type'), array('JS API', 'REST API', 'Feed API')));
+		$fields->addFieldToTab('Root.Main', new DropdownField('ConnectorType', _t('ExternalContentSource.CONNECTOR_TYPE', 'Connector Type'), $this->dbObject('ConnectorType')->enumValues()));
 		$fields->addFieldToTab('Root.Main', new TextField('ApiUrl', _t('ExternalContentSource.API_URL', 'API Url')));
 		$fields->addFieldToTab('Root.Main', new TextField('Username', _t('ExternalContentSource.USER', 'Username')));
 		$fields->addFieldToTab('Root.Main', new PasswordField('Password', _t('ExternalContentSource.PASS', 'Password')));
@@ -115,7 +115,7 @@ class MatrixContentSource extends ExternalContentSource implements ExternalConte
 			try {
 				$this->repo->connect($config);
 			} catch (Exception $zue) {
-				error_log("Failed connecting to repository: ".$zue->getMessage()."\n");
+				singleton('ECUtils')->log("Failed connecting to repository: ".$zue->getMessage()."\n");
 			}
 		}
 
@@ -135,6 +135,9 @@ class MatrixContentSource extends ExternalContentSource implements ExternalConte
 	protected function createConnector($type)
 	{
 		switch ($type) {
+			case 'SOAP API': {
+				return new MatrixSOAPClient();
+			}
 			case 'JS API': {
 				return new MatrixJSClient($this->CacheTimeout);
 			}
@@ -200,16 +203,16 @@ class MatrixContentSource extends ExternalContentSource implements ExternalConte
 			try {
 				$repo = $this->getRemoteRepository();
 				// Load the general data so we know what typeocde we're dealing with
-				$data = $repo->call('getGeneral', array('id' => $objectId));
+				$data = $repo->getAsset(array('id' => $objectId));
 				$type = isset($data->type_code) ? $data->type_code : null;
 				$clazz = 'MatrixContentItem';
 				if ($type) {
 					$clazz = isset(self::$type_mapping[$type]) ? self::$type_mapping[$type] : 'MatrixContentItem';
 				}
-				$item = new $clazz($this, $objectId);
+				$item = new $clazz($this, $objectId, $data);
 				$this->objectCache[$objectId] = $item;
 			} catch (Zend_Http_Client_Adapter_Exception $e) {
-				error_log("Failed connecting to matrix server: ".$e->getMessage());
+				singleton('ECUtils')->log("Failed connecting to matrix server: ".$e->getMessage());
 				$this->objectCache[$objectId] = null;
 			}
 		}
@@ -252,7 +255,7 @@ class MatrixContentSource extends ExternalContentSource implements ExternalConte
 				}
 			}
 		} catch (Exception $e) {
-			error_log(__CLASS__.':'.__LINE__.':: '.$e->getMessage());
+			singleton('ECUtils')->log(__CLASS__.':'.__LINE__.':: '.$e->getMessage());
 		}
 
 		return $children;
@@ -299,5 +302,3 @@ class MatrixContentSource extends ExternalContentSource implements ExternalConte
 	}
 }
 
-
-?>
