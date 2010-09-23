@@ -44,9 +44,12 @@ class MatrixStandardPageItem extends MatrixContentItem
 	/**
 	 * Converts all contained bodycopies into content
 	 *
+	 * @param $linkTo
+	 *			Whether to resolve links to local or remote page objects
+	 *
 	 * @return String
 	 */
-    public function Content()
+    public function Content($linkTo='local')
 	{
 		if (!$this->content) {
 			$this->content = '';
@@ -58,7 +61,7 @@ class MatrixStandardPageItem extends MatrixContentItem
 				}
 			}
 
-			$this->content = $this->convertContent($this->content);
+			$this->content = $this->convertContent($this->content, $linkTo);
 		}
 		return $this->content;
 	}

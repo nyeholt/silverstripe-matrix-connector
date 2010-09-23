@@ -180,17 +180,17 @@ class MatrixContentItem extends ExternalContentItem
 	 *
 	 * Converts ./?a=xx links, @todo convert %keywords% also
 	 */
-	public function convertContent($content) {
+	public function convertContent($content, $linkTo='local') {
 		if (preg_match_all('|\./\\?a=(\d+)|', $content, $matches)) {
 			if (isset($matches[1])) {
 				foreach ($matches[1] as $assetid) {
 					if ($item = $this->source->getObject($assetid)) {
-						$content = str_replace('./?a='.$assetid, $item->Link(), $content);
+						$link = $linkTo == 'local' ? $item->Link() : ($item->web_path ? $item->web_path : './?a='.$assetid);
+						$content = str_replace('./?a='.$assetid, $link, $content);
 					}
 				}
 			}
 		}
-
 		return $content;
 	}
 }

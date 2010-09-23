@@ -1,3 +1,8 @@
+Version 0.2.1
+-------------
+* Added a "Remote page" that can take content directly from a matrix source, and map
+urls back to that matrix source. 
+
 Version 0.2.0
 -------------
 
