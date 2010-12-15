@@ -20,13 +20,19 @@ STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 OF SUCH DAMAGE.
  
 */
- 
-class MatrixListingPage extends MatrixPage
-{
+
+
+/**
+ * 
+ * @author Marcus Nyeholt <marcus@silverstripe.com.au>
+ * @license http://silverstripe.org/bsd-license/
+ */
+class MatrixListingPage extends MatrixPage {
 	public static $db = array(
 		'NoResultsContent' => 'HTMLText'
 	);
 }
 
-class MatrixListingPage_Controller extends MatrixPage_Controller {}
-?>
+class MatrixListingPage_Controller extends MatrixPage_Controller {
+	
+}
