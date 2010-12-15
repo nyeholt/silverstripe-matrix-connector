@@ -204,6 +204,10 @@ class MatrixContentSource extends ExternalContentSource implements ExternalConte
 				$repo = $this->getRemoteRepository();
 				// Load the general data so we know what typeocde we're dealing with
 				$data = $repo->getAsset(array('id' => $objectId));
+				if (!$data) {
+					singleton('ECUtils')->log("Failed getting data from repo. Check your API Url setting");
+					return;
+				}
 				$type = isset($data->type_code) ? $data->type_code : null;
 				$clazz = 'MatrixContentItem';
 				if ($type) {

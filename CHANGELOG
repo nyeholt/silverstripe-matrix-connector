@@ -1,18 +1,23 @@
-Version 0.2.1
--------------
+
+2010-12-15 v0.2.2
+-----------------
+
+* Minor bug fixes
+
+v0.2.1
+------
 * Added a "Remote page" that can take content directly from a matrix source, and map
 urls back to that matrix source. 
 
-Version 0.2.0
--------------
+v0.2.0
+------
 
 * Added ability to import using queued jobs
 * Added more specific ContentItem types for better display of icons and import
   functionality
 
 
-Version 0.1.0
--------------
-2009-10-02
+2009-10-02 v0.1.0
+-----------------
 
 * Initial development

@@ -1,10 +1,12 @@
 <?php
-/* All code covered by the BSD license located at http://silverstripe.org/bsd-license/ */
-
 /**
+ * A Client for connecting to matrix via SOAP calls. 
  * 
+ * Note that the SOAP server for Matrix is not currently GPL
+ * available. 
  *
  * @author Marcus Nyeholt <marcus@silverstripe.com.au>
+ * @license http://silverstripe.org/bsd-license/ 
  */
 class MatrixSOAPClient {
 	protected $wsdlUrl;
@@ -36,6 +38,10 @@ class MatrixSOAPClient {
 		$login = $this->user ? array('login' => $this->user, 'password' => $this->pass) : null;
 
 		if ($this->wsdlUrl) {
+			if (strpos($this->wsdlUrl, '.js') > 0) {
+				// probably an incorrect setting! :o
+				return;
+			}
 			$this->client = new SoapClient($this->wsdlUrl, $login);
 		}
 	}

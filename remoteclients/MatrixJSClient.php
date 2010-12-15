@@ -142,10 +142,12 @@ class MatrixJSClient
 	public function getAsset($args) {
 		$data = $this->getGeneral($args);
 		$attr = $this->getAttributes($args);
-		foreach ($attr as $k => $v) {
-			$data->$k = $v;
+		if ($attr) {
+			foreach ($attr as $k => $v) {
+				$data->$k = $v;
+			}
 		}
-
+		
 		return $data;
 	}
 	
