@@ -31,7 +31,7 @@ OF SUCH DAMAGE.
  */
 class MatrixContentSource extends ExternalContentSource implements ExternalContentRepositoryProvider
 {
-	public static $db = array(
+	private static $db = array(
 		'ConnectorType' => "Enum('JS API,SOAP API')",
 		'ApiUrl' => 'Varchar(128)',
 		'Username' => 'Varchar(64)',
@@ -41,7 +41,7 @@ class MatrixContentSource extends ExternalContentSource implements ExternalConte
 		'RootAsset' => 'Int',
 	);
 	
-	public static $icon = array("matrix-connector/images/matrix/matrix", "folder");
+	private static $icon = array("matrix-connector/images/matrix/matrix", "folder");
 
 
 	/**
@@ -239,15 +239,15 @@ class MatrixContentSource extends ExternalContentSource implements ExternalConte
 	 * Override to fool hierarchy.php
 	 * 
 	 * @param boolean $showAll
-	 * @return DataObjectSet
+	 * @return ArrayList
 	 */
 	public function stageChildren($showAll = false) {
 		// if we don't have an ID directly, we should load and return ALL the external content sources
 		if (!$this->ID) {
-			return DataObject::get('MatrixContentSource');
+			return MatrixContentSource::get();
 		}
 
-		$children = new DataObjectSet();
+		$children = new ArrayList();
 		try {
 			if ($this->ApiUrl && $this->RootAsset) {
 				$repo = $this->getRemoteRepository();
@@ -272,37 +272,5 @@ class MatrixContentSource extends ExternalContentSource implements ExternalConte
 		}
 	}
 
-	/**
-	 * Gets the children of this item as a UL that is acceptable for use in a tree.
-	 *
-	 * We override this method because the base SilverStripe implementation does a bunch of stuff that's really
-	 * not useful for us when working with a purely ajax environment
-	 */
-	public function getChildrenAsUL($attributes = "", $titleEval = '"<li>" . $child->Title', $extraArg = null) {
-		return $this->getChildrenOfNodeAsUL($attributes, $titleEval, $extraArg, $this);
-	}
-
-	/**
-	 * Performs the work of converting children into a UL
-	 *
-	 * @param String $attributes
-	 * @param String $titleEval
-	 * @param String $extraArg
-	 * @param DataObject $forNode
-	 * @return String
-	 */
-	public function getChildrenOfNodeAsUL($attributes = "", $titleEval = '"<li>" . $child->Title', $extraArg = null, $forNode = null)
-	{
-		$children = $forNode->stageChildren();
-		$list = array('<ul>');
-		$titleEval = str_replace('. $child->markingClasses()', '', $titleEval);
-		foreach ($children as $child) {
-			$child->class = get_class($child) . ' unexpanded closed';
-			eval("\$li = $titleEval;");
-			$list[] = $li;
-		}
-		$list[] = '</ul>';
-		return implode("\n", $list);
-	}
 }
 

@@ -28,7 +28,7 @@ OF SUCH DAMAGE.
  * @license http://silverstripe.org/bsd-license/
  */
 class MatrixListingPage extends MatrixPage {
-	public static $db = array(
+	private static $db = array(
 		'NoResultsContent' => 'HTMLText'
 	);
 }

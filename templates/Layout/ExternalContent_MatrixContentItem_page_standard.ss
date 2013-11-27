@@ -11,10 +11,10 @@ To add more, create templates for
  
 <h2>$Title</h2>
 
-<% control Children %>
+<% loop Children %>
 	<% if type_code == bodycopy %>
-	<% control Children %>
-		<% control Children %>
+	<% loop Children %>
+		<% loop Children %>
 $html
 		<% end_control %>
 	<% end_control %>

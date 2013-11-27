@@ -8,7 +8,7 @@
  */
 class MatrixPage extends Page
 {
-	public static $db = array(
+	private static $db = array(
 		'MatrixId' => 'Varchar(64)',
 		'OriginalProperties' => 'Text',
 	);
