@@ -51,7 +51,7 @@ class PageStandardToStandardPageTransformer implements ExternalContentTransforme
 		$newPage->ParentID = $parentObject->ID;
 		$newPage->Sort = 0;
 
-		$newPage->write();
+		$newPage->writeToStage('Stage');
 		return new TransformResult($newPage, $filteredChildren);
 		
 	}

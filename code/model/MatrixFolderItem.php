@@ -32,7 +32,7 @@ class MatrixFolderItem extends MatrixContentItem
 	 *
 	 * @var String
 	 */
-	public static $icon = "cms/images/treeicons/folder";
+	private static $icon = "cms/images/treeicons/folder";
 
 	/**
 	 * Cache the computed content value

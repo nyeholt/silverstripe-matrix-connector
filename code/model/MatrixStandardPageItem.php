@@ -32,7 +32,7 @@ class MatrixStandardPageItem extends MatrixContentItem
 	 *
 	 * @var String
 	 */
-	public static $icon = array("matrix-connector/images/matrix/matrix-standard-page", "file");
+	private static $icon = array("matrix-connector/images/matrix/matrix-standard-page", "file");
 
 	/**
 	 * Cache the computed content value
@@ -70,11 +70,11 @@ class MatrixStandardPageItem extends MatrixContentItem
 	 * Matrix has the concept of dependent children whereby some asset types have children that only have
 	 * relevance in the context of 'this' asset. This method returns just those children
 	 *
-	 * @return DataObjectSource
+	 * @return ArrayList
 	 */
 	public function DependentChildren() {
 		$all = $this->stageChildren();
-		$children = new DataObjectSet();
+		$children = new ArrayList();
 
 		foreach ($all as $child) {
 			// see if it's dependent
@@ -88,11 +88,11 @@ class MatrixStandardPageItem extends MatrixContentItem
 	/**
 	 * Return all children that are NOT dependent children in matrix.
 	 *
-	 * @return DataObjectSource
+	 * @return ArrayList
 	 */
 	public function Children() {
 		$all = $this->stageChildren();
-		$children = new DataObjectSet();
+		$children = new ArrayList();
 		
 		foreach ($all as $child) {
 			// see if it's dependent

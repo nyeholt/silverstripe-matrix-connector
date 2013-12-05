@@ -117,18 +117,21 @@ class MatrixSOAPClient {
 	 */
 	public function getChildren($args) {
 		$id = (string) isset($args['id']) ? $args['id'] : 0;
-		$details = $this->client->GetLinks(array('AssetID' => $id, 'SideOfLink' => 'major', 'LinkType' => 3 /* TYPE_1 or TYPE_2 */));
 		$links = array();
-		if ($details && isset($details->GetLinksResult)) {
-			if (!is_array($details->GetLinksResult)) {
-				$details->GetLinksResult = array($details->GetLinksResult);
-			}
-			foreach ($details->GetLinksResult as $link) {
-				$link->id = $link->MinorID;
-				$links[] = $link;
+		try {
+			$details = $this->client->GetLinks(array('AssetID' => $id, 'SideOfLink' => 'major', 'LinkType' => 3 /* TYPE_1 or TYPE_2 */));
+			if ($details && isset($details->GetLinksResult)) {
+				if (!is_array($details->GetLinksResult)) {
+					$details->GetLinksResult = array($details->GetLinksResult);
+				}
+				foreach ($details->GetLinksResult as $link) {
+					$link->id = $link->MinorID;
+					$links[] = $link;
+				}
 			}
 		}
-
+		catch(SoapFault $sf) {
+		}
 		return $links;
 	}
 

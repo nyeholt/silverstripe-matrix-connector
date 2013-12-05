@@ -32,7 +32,7 @@ class MatrixAssetListingPageItem extends MatrixContentItem
 	 *
 	 * @var String
 	 */
-	public static $icon = array("matrix-connector/images/matrix/matrix-asset-listing-page", "file");
+	private static $icon = array("matrix-connector/images/matrix/matrix-asset-listing-page", "file");
 
 	/**
 	 * Cache the computed content value
@@ -80,11 +80,11 @@ class MatrixAssetListingPageItem extends MatrixContentItem
 	 * Matrix has the concept of dependent children whereby some asset types have children that only have
 	 * relevance in the context of 'this' asset. This method returns just those children
 	 *
-	 * @return DataObjectSource
+	 * @return ArrayList
 	 */
 	public function DependentChildren() {
 		$all = $this->stageChildren();
-		$children = new DataObjectSet();
+		$children = new ArrayList();
 		foreach ($all as $child) {
 			// see if it's dependent
 			if ($child->type_code == 'bodycopy') {
@@ -103,11 +103,11 @@ class MatrixAssetListingPageItem extends MatrixContentItem
 	/**
 	 * Return all children that are NOT dependent children in matrix.
 	 *
-	 * @return DataObjectSource
+	 * @return ArrayList
 	 */
 	public function Children() {
 		$all = $this->stageChildren();
-		$children = new DataObjectSet();
+		$children = new ArrayList();
 		
 		foreach ($all as $child) {
 			// see if it's dependent

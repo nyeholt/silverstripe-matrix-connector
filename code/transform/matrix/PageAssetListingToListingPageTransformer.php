@@ -50,7 +50,7 @@ class PageAssetListingToListingPageTransformer implements ExternalContentTransfo
 		$newPage->ParentID = $parentObject->ID;
 		$newPage->Sort = 0;
 
-		$newPage->write();
+		$newPage->writeToStage('Stage');
 		return new TransformResult($newPage, $filteredChildren);
 		
 	}

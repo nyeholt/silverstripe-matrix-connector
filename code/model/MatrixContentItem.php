@@ -32,7 +32,7 @@ class MatrixContentItem extends ExternalContentItem
 	 * 
 	 * @var String
 	 */
-	public static $icon = array("matrix-connector/images/matrix/matrix-item", "folder");
+	private static $icon = array("matrix-connector/images/matrix/matrix-item", "folder");
 
 	/**
 	 * Holds all the information about the links this object has. 
@@ -93,15 +93,15 @@ class MatrixContentItem extends ExternalContentItem
 	 * to specifically handle dependent and non-dependent children
 	 * 
 	 * @param boolean $showAll
-	 * @return DataObjectSet
+	 * @return ArrayList
 	 */
 	public function stageChildren($showAll = false) {
 		if (!$this->ID) {
-			return DataObject::get('MatrixContentSource');
+			return MatrixContentSource::get();
 		}
 
 		if (!$this->objChildren) {
-			$this->objChildren = new DataObjectSet();
+			$this->objChildren = new ArrayList();
 			// For the first batch, just get all the immediate children of the
 			// top level 
 			$repo = $this->source->getRemoteRepository();
@@ -131,16 +131,6 @@ class MatrixContentItem extends ExternalContentItem
 		}
 
 		return $this->objChildren;
-	}
-
-	/**
-	 * Gets the children of this item as a UL that is acceptable for use in a tree.
-	 *
-	 * We override this method because the base SilverStripe implementation does a bunch of stuff that's really
-	 * not useful for us when working with a purely ajax environment
-	 */
-	public function getChildrenAsUL($attributes = "", $titleEval = '"<li>" . $child->Title', $extraArg = null, $limitToMarked = false, $childrenMethod = "AllChildrenIncludingDeleted", $numChildrenMethod = "numChildren", $rootCall = true, $minNodeCount = 30) {
-		return $this->source->getChildrenOfNodeAsUL($attributes, $titleEval, $extraArg, $this);
 	}
 
 	/**
