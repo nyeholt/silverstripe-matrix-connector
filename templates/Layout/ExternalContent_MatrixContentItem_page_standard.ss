@@ -16,7 +16,7 @@ To add more, create templates for
 	<% loop Children %>
 		<% loop Children %>
 $html
-		<% end_control %>
-	<% end_control %>
+		<% end_loop %>
+	<% end_loop %>
 	<% end_if %>
-<% end_control %>  
+<% end_loop %>
