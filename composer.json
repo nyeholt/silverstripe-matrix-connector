@@ -1,0 +1,15 @@
+{
+	"name": "nyeholt/silverstripe-matrix-connector",
+	"description": "A connector for the external content module to connect to MySource Matrix systems.",
+	"license": "BSD-3-Clause",
+	"type": "silverstripe-module",
+	"keywords": ["silverstripe", "external-content", "silverstripe-matrix-connector", "matrix"],
+	"authors": [{
+		"name": "Marcus Nyeholt",
+		"email": "marcus@silverstripe.com.au"
+	}],
+	"require": {
+		"silverstripe/framework": ">=3.1.0",
+		"silverstripe/external-content": "*"
+	}
+}
