@@ -49,7 +49,7 @@ class MatrixStandardPageItem extends MatrixContentItem
 	 *
 	 * @return String
 	 */
-    public function Content($linkTo='local')
+    public function Content($linkTo='local', $convertLinks = false)
 	{
 		if (!$this->content) {
 			$this->content = '';
@@ -61,7 +61,9 @@ class MatrixStandardPageItem extends MatrixContentItem
 				}
 			}
 
-			$this->content = $this->convertContent($this->content, $linkTo);
+            if ($convertLinks) {
+                $this->content = $this->convertContent($this->content, $linkTo);
+            }
 		}
 		return $this->content;
 	}

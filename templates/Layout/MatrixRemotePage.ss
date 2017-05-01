@@ -1,3 +1,3 @@
 <h2>$ContentItem.Title</h2>
 
-$ContentItem.Content(remote)
+$ContentItem.Content(remote,1)
